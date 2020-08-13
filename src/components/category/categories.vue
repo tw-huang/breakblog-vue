@@ -11,12 +11,23 @@
       <!-- 搜索于添加区域 -->
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input
+            placeholder="请输入内容"
+            v-model="queryInfo.keyword"
+            clearable
+            @clear="getCategoryList"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="getCategoryList"
+            ></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">添加分类</el-button>
+          <el-button type="primary" @click="addDialogVisible = true"
+            >添加分类</el-button
+          >
         </el-col>
       </el-row>
       <!-- 分类列表区域 -->
@@ -51,6 +62,26 @@
         :total="total"
       ></el-pagination>
     </el-card>
+    <!-- 添加分类对话框 -->
+    <el-dialog title="添加分类" :visible.sync="addDialogVisible" width="50%">
+      <!-- 内容主体区域 -->
+      <el-form
+        :model="addForm"
+        :rules="addFormRules"
+        ref="addFormRef"
+        label-width="70px"
+      >
+        <el-form-item label="分类" prop="name">
+          <el-input v-model="addForm.name"></el-input> </el-form-item
+      ></el-form>
+      <!-- 底部区域 -->
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="addDialogVisible = false">取 消</el-button>
+        <el-button type="primary" @click="addDialogVisible = false"
+          >确 定</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -68,6 +99,22 @@ export default {
       },
       categoryList: [],
       total: 0,
+      //控制添加对话框的显示与隐藏
+      addDialogVisible: false,
+      //添加表单数据
+      addForm: {
+        name: "",
+      },
+      //添加表单验证规则对象
+      addFormRules: {
+        name: [
+          {
+            required: true,
+            message: "请输入分类名称",
+            trigger: "blur",
+          },
+        ],
+      },
     };
   },
   created() {
