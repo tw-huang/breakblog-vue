@@ -11,33 +11,49 @@
       <!-- 搜索于添加区域 -->
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input
+            placeholder="请输入内容"
+            v-model="queryInfo.keyword"
+            clearable
+            @clear="getcommentList"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="getcommentList"
+            ></el-button>
           </el-input>
-        </el-col>
-        <el-col :span="4">
-          <el-button type="primary">
-            编写文章
-          </el-button>
         </el-col>
       </el-row>
       <!-- 评论列表区域 -->
-      <el-table :data="categoryList" border stripe>
+      <el-table :data="commentList" border stripe>
         <el-table-column label="#" type="index"></el-table-column>
-        <el-table-column label="分类名称" prop="categoryName"></el-table-column>
-        <el-table-column label="文章数量" prop="counts"></el-table-column>
-        <el-table-column label="浏览次数" prop="views"></el-table-column>
+        <el-table-column label="作者" prop="author"></el-table-column>
+        <el-table-column label="email" prop="email"></el-table-column>
+        <el-table-column label="网站" prop="site"></el-table-column>
+        <el-table-column label="文章" prop="postTitle"></el-table-column>
+        <el-table-column label="内容" prop="body"></el-table-column>
+        <el-table-column label="状态">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.reviewed"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              active-text="已读"
+              inactive-text="未读"
+              @change="updateReviewed(scope.row.id, scope.row.reviewed)"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
-          <template>
-            <el-button
-              type="primary"
-              icon="el-icon-edit"
-              size="mini"
-            ></el-button>
+          <template slot-scope="scope">
+            <!-- 删除 -->
             <el-button
               type="danger"
               icon="el-icon-delete"
               size="mini"
+              @click="deleteComment(scope.row.id)"
             ></el-button>
           </template>
         </el-table-column>
@@ -51,8 +67,7 @@
         :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
-      >
-      </el-pagination>
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -61,43 +76,81 @@
 export default {
   data() {
     return {
-      //获取分类列表的参数对象
+      //获取评论列表的参数对象
       queryInfo: {
         keyword: "",
         //当前页数
-        pagenum: 1,
+        pageNum: 1,
         //当前每页显示数据
-        pagesize: 10,
+        pageSize: 10,
       },
-      categoryList: [],
+      commentList: [],
       total: 0,
+      //状态
+      reviewed: "",
     };
   },
   created() {
-    this.getCategoryList();
+    this.getcommentList();
   },
   methods: {
-    async getCategoryList() {
-      const { data: res } = await this.$http.get("categories", {
+    async getcommentList() {
+      const { data: res } = await this.$http.get("comments", {
         params: this.queryInfo,
       });
       if (res.code !== 1) {
-        return this.$message.error("获取用户列表失败");
+        return this.$message.error("获取评论列表失败");
       }
-      this.categoryList = res.data.list;
+      this.commentList = res.data.list;
       this.total = res.data.total;
       // console.log(res.data.list);
     },
     //监听pagesize改变事件
     handleSizeChange(newSize) {
-      this.queryInfo.pagesize = newSize;
-      this.getCategoryList();
+      this.queryInfo.pageSize = newSize;
+      this.getcommentList();
     },
     //监听页码值改变事件
     handleCurrentChange(newPage) {
       // console.log(newPage);
-      this.queryInfo.pagenum = newPage;
-      this.getCategoryList();
+      this.queryInfo.pageNum = newPage;
+      this.getcommentList();
+    },
+    //更新状态
+    async updateReviewed(id, reviewed) {
+      // console.log(id);
+      // console.log(reviewed);
+      const { data: res } = await this.$http.put("comment", {
+        id: id,
+        reviewed: reviewed == true ? 1 : 0,
+      });
+      console.log(res);
+    },
+    //删除评论
+    deleteComment(id) {
+      this.$confirm("删除操作, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          //发起删除请求
+          const { data: res } = await this.$http.delete("comment/" + id);
+          if (res.code == 0) {
+            this.$message.error("删除失败");
+          }
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+          this.getcommentList();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
   },
 };
