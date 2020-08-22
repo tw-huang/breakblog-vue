@@ -11,34 +11,46 @@
       <!-- 搜索于添加区域 -->
       <el-row :gutter="20">
         <el-col :span="8">
-          <el-input placeholder="请输入内容">
-            <el-button slot="append" icon="el-icon-search"></el-button>
+          <el-input
+            placeholder="请输入内容"
+            v-model="queryInfo.keyword"
+            clearable
+            @clear="getPostList"
+          >
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="getPostList"
+            ></el-button>
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary">
-            编写文章
-          </el-button>
+          <el-button type="primary" @click="addDialogVisible = true"
+            >添加文章</el-button
+          >
         </el-col>
       </el-row>
       <!-- 文章列表区域 -->
-      <el-table :data="categoryList" border stripe>
+      <el-table :data="PostList" border stripe>
         <el-table-column label="#" type="index"></el-table-column>
         <el-table-column label="文章标题" prop="title"></el-table-column>
         <el-table-column label="文章分类" prop="categoryName"></el-table-column>
         <el-table-column label="浏览次数" prop="views"></el-table-column>
         <el-table-column label="评论数量" prop="counts"></el-table-column>
         <el-table-column label="操作">
-          <template>
+          <template slot-scope="scope">
+            <!-- 修改 -->
             <el-button
               type="primary"
               icon="el-icon-edit"
               size="mini"
             ></el-button>
+            <!-- 删除 -->
             <el-button
               type="danger"
               icon="el-icon-delete"
               size="mini"
+              @click="deletePost(scope.row.id)"
             ></el-button>
           </template>
         </el-table-column>
@@ -52,8 +64,7 @@
         :page-size="queryInfo.pagesize"
         layout="total, sizes, prev, pager, next, jumper"
         :total="total"
-      >
-      </el-pagination>
+      ></el-pagination>
     </el-card>
   </div>
 </template>
@@ -62,7 +73,7 @@
 export default {
   data() {
     return {
-      //获取分类列表的参数对象
+      //获取文章列表的参数对象
       queryInfo: {
         keyword: "",
         //当前页数
@@ -70,7 +81,7 @@ export default {
         //当前每页显示数据
         pageSize: 10,
       },
-      categoryList: [],
+      PostList: [],
       total: 0,
     };
   },
@@ -85,7 +96,7 @@ export default {
       if (res.code !== 1) {
         return this.$message.error("获取文章列表失败");
       }
-      this.categoryList = res.data.list;
+      this.PostList = res.data.list;
       this.total = res.data.total;
       // console.log(res.data.list);
     },
@@ -99,6 +110,33 @@ export default {
       // console.log(newPage);
       this.queryInfo.pageNum = newPage;
       this.getPostList();
+    },
+    //删除文章
+    deletePost(id) {
+      // console.log(id);
+      this.$confirm("删除操作, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(async () => {
+          //发起删除请求
+          const { data: res } = await this.$http.delete("post/" + id);
+          if (res.code == 0) {
+            this.$message.error("删除失败");
+          }
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+          this.getPostList();
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除",
+          });
+        });
     },
   },
 };
