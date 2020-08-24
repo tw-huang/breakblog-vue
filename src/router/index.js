@@ -5,6 +5,7 @@ import Home from "../components/Home.vue";
 import Welcome from "../components/Welcome.vue";
 import Categories from "../components/category/categories.vue";
 import Posts from "../components/post/posts.vue";
+import Post from "../components/post/post.vue";
 import Links from "../components/link/links.vue";
 import Comments from "../components/comment/comments.vue";
 
@@ -36,6 +37,10 @@ const router = new VueRouter({
         {
           path: "/posts",
           component: Posts,
+        },
+        {
+          path: "/post",
+          component: Post,
         },
         {
           path: "/links",

@@ -141,6 +141,13 @@ export default {
               children: [],
               order: null,
             },
+            {
+              id: 122,
+              authName: "编写文章",
+              path: "post",
+              children: [],
+              order: null,
+            },
           ],
           order: 2,
         },

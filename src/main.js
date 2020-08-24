@@ -7,6 +7,7 @@ import "./assets/css/global.css";
 
 import axios from "axios";
 Vue.prototype.$http = axios;
+// axios.defaults.baseURL = "http://192.168.2.220:9001/api/v1/";
 axios.defaults.baseURL = "http://localhost:9001/api/v1/";
 // http request 拦截器
 axios.interceptors.request.use(
