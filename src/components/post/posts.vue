@@ -25,9 +25,7 @@
           </el-input>
         </el-col>
         <el-col :span="4">
-          <el-button type="primary" @click="addDialogVisible = true"
-            >添加文章</el-button
-          >
+          <el-button type="primary" @click="addPost">编写文章</el-button>
         </el-col>
       </el-row>
       <!-- 文章列表区域 -->
@@ -137,6 +135,9 @@ export default {
             message: "已取消删除",
           });
         });
+    },
+    addPost() {
+      this.$router.push("/post");
     },
   },
 };

@@ -8,10 +8,15 @@
     </el-breadcrumb>
     <el-card>
       <!-- 搜索于添加区域 -->
-      <el-form ref="form" :model="postForm" label-width="80px">
+      <el-form
+        :model="postForm"
+        label-width="80px"
+        :rules="postFormRules"
+        ref="postFormRef"
+      >
         <el-row :gutter="20">
           <el-col :span="10">
-            <el-form-item label-width="0">
+            <el-form-item label-width="0" prop="title">
               <el-input
                 v-model="postForm.title"
                 placeholder="请输入文章标题"
@@ -19,24 +24,28 @@
             </el-form-item>
           </el-col>
           <el-col :span="10">
-            <el-form-item label-width="0">
+            <el-form-item label-width="0" prop="categoryId">
               <el-select
-                v-model="postForm.categoty"
+                v-model="postForm.categoryId"
                 placeholder="请选择文章分类"
               >
-                <el-option label="区域一" value="shanghai"></el-option>
-                <el-option label="区域二" value="beijing"></el-option>
+                <el-option
+                  v-for="(item, index) in categories"
+                  :label="item.name"
+                  :value="item.id"
+                  :key="index"
+                ></el-option>
               </el-select> </el-form-item
           ></el-col>
         </el-row>
-        <el-form-item label-width="0">
+        <el-form-item label-width="0" prop="subtitle">
           <el-input
             type="textarea"
-            v-model="postForm.subTitle"
+            v-model="postForm.subtitle"
             placeholder="请输入文章标题"
           ></el-input>
         </el-form-item>
-        <el-form-item label-width="0">
+        <el-form-item label-width="0" prop="body">
           <editor v-model="postForm.body" :init="init" :disabled="disabled">
           </editor>
         </el-form-item>
@@ -101,10 +110,11 @@ export default {
   },
   data() {
     return {
+      categories: [],
       postForm: {
         title: "",
-        category: "",
-        subTitle: "",
+        categoryId: "",
+        subtitle: "",
         body: "",
       },
       init: {
@@ -118,21 +128,63 @@ export default {
         branding: false,
         menubar: false,
       },
+      postFormRules: {
+        title: [
+          {
+            required: true,
+            message: "请输入文章标题",
+            trigger: "blur",
+          },
+        ],
+        categoryId: [
+          {
+            required: true,
+            message: "请选择文章分类",
+            trigger: "blur",
+          },
+        ],
+        subtitle: [
+          {
+            required: true,
+            message: "请输入文章副标题",
+            trigger: "blur",
+          },
+        ],
+        body: [{ required: true, message: "请输入文章内容", trigger: "blur" }],
+      },
     };
   },
   mounted() {
     tinymce.init({});
   },
+  created() {
+    this.getCategories();
+  },
   methods: {
-    async savePost() {
-      console.log(this.postForm);
-      //校验文章内容
+    async getCategories() {
+      const { data: res } = await this.$http.get("post/new/categories");
+      // console.log(res);
+      if (res.code !== 1) {
+        return this.$message.error("获取分类列表失败");
+      }
+      this.categories = res.data;
+      // console.log(this.categories);
+    },
 
-      // const { data: res } = await this.$http.post("post", this.addForm);
-      // if (res.code == 0) {
-      //   this.$message.error("添加失败");
-      // }
-      // this.$message.success("添加成功");
+    savePost() {
+      // console.log(this.postForm);
+      //校验文章内容
+      this.$refs.postFormRef.validate(async (valid) => {
+        // console.log(valid);
+        if (!valid) return;
+        //发起请求
+        const { data: res } = await this.$http.post("post", this.postForm);
+        if (res.code == 0) {
+          this.$message.error("保存失败");
+        }
+        this.$message.success("保存成功");
+        this.$router.push("/posts");
+      });
     },
   },
 };
