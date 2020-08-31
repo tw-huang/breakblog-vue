@@ -42,6 +42,7 @@
               type="primary"
               icon="el-icon-edit"
               size="mini"
+              @click="editPost(scope.row.id)"
             ></el-button>
             <!-- 删除 -->
             <el-button
@@ -138,6 +139,9 @@ export default {
     },
     addPost() {
       this.$router.push("/post");
+    },
+    editPost(id) {
+      this.$router.push("/post?id=" + id);
     },
   },
 };

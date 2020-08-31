@@ -8,6 +8,7 @@ import Posts from "../components/post/posts.vue";
 import Post from "../components/post/post.vue";
 import Links from "../components/link/links.vue";
 import Comments from "../components/comment/comments.vue";
+import Reports from "../components/report/reports.vue";
 
 Vue.use(VueRouter);
 
@@ -49,6 +50,10 @@ const router = new VueRouter({
         {
           path: "/comments",
           component: Comments,
+        },
+        {
+          path: "/reports",
+          component: Reports,
         },
       ],
     },

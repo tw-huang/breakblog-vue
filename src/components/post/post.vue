@@ -42,7 +42,7 @@
           <el-input
             type="textarea"
             v-model="postForm.subtitle"
-            placeholder="请输入文章标题"
+            placeholder="请输入文章副标题"
           ></el-input>
         </el-form-item>
         <el-form-item label-width="0" prop="body">
@@ -159,6 +159,12 @@ export default {
   },
   created() {
     this.getCategories();
+    // 编辑文章初始数据
+    var postId = this.$route.query.id;
+    // 编辑文章
+    if (postId !== undefined) {
+      this.getPost(postId);
+    }
   },
   methods: {
     async getCategories() {
@@ -185,6 +191,17 @@ export default {
         this.$message.success("保存成功");
         this.$router.push("/posts");
       });
+    },
+    //初始化文章数据
+    async getPost(postId) {
+      const { data: res } = await this.$http.get("post/" + postId);
+      if (res.code == 0) {
+        this.$message.error("获取文章数据失败");
+      }
+      this.postForm.title = res.data.title;
+      this.postForm.subtitle = res.data.subtitle;
+      this.postForm.body = res.data.body;
+      this.postForm.categoryId = res.data.categoryId;
     },
   },
 };

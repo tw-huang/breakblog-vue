@@ -184,11 +184,11 @@ export default {
         {
           id: 150,
           authName: "数据统计",
-          path: "reports",
+          path: "report",
           children: [
             {
               id: 151,
-              authName: "数据报表",
+              authName: "数据报告",
               path: "reports",
               children: [],
               order: null,
