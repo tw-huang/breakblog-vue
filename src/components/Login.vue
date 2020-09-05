@@ -5,7 +5,7 @@
         <img src="../assets/logo.png" alt="logo" />
       </div>
       <div class="login_text">
-        BreakBlog 登录
+        BreakBlog - 管理后台
       </div>
       <!-- 登录表单 -->
       <el-form

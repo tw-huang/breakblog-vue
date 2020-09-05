@@ -80,8 +80,9 @@
       margin-left: 15px;
     }
     img {
-      height: 60px;
-      width: 60px;
+      height: 40px;
+      width: 40px;
+      border-radius: 50%;
     }
   }
 }

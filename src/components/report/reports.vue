@@ -8,7 +8,7 @@
     </el-breadcrumb>
     <!-- 卡片视图区域 -->
     <el-card>
-      <div id="main" style="width: 600px;height:400px;"></div>
+      <div id="categoryReport" style="width: 600px;height:400px;"></div>
     </el-card>
   </div>
 </template>
@@ -19,25 +19,29 @@ import "echarts/lib/component/tooltip";
 import "echarts/lib/component/title";
 export default {
   mounted() {
-    this.drawLine();
+    this.categoryReport();
   },
   methods: {
-    drawLine() {
-      // 基于准备好的dom，初始化echarts实例
-      let myChart = echarts.init(document.getElementById("main"));
+    async categoryReport() {
+      const { data: res } = await this.$http.get("category/report");
+
+      let categoryReportEcharts = echarts.init(
+        document.getElementById("categoryReport")
+      );
       // 绘制图表
-      myChart.setOption({
-        title: { text: "ECharts 入门示例" },
+      categoryReportEcharts.setOption({
+        title: { text: "分类-文章点击次数" },
         tooltip: {},
         xAxis: {
-          data: ["衬衫", "羊毛衫", "雪纺衫", "裤子", "高跟鞋", "袜子"],
+          data: res.data.name,
         },
         yAxis: {},
         series: [
           {
-            name: "销量",
+            name: "点击量",
             type: "bar",
-            data: [5, 20, 36, 10, 10, 20],
+            data: res.data.click,
+            color: "#409eff",
           },
         ],
       });
