@@ -102,17 +102,17 @@ export default {
       //登录表单数据绑定
       loginForm: {
         username: "admin",
-        password: "breakblog",
+        password: "breakblog"
       },
       // 表单验证规则
       loginFormRules: {
         // 验证用户名
         username: [
-          { required: true, message: "请输入用户名", trigger: "blur" },
+          { required: true, message: "请输入用户名", trigger: "blur" }
         ],
         //验证密码
-        password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-      },
+        password: [{ required: true, message: "请输入密码", trigger: "blur" }]
+      }
     };
   },
   methods: {
@@ -121,7 +121,7 @@ export default {
       this.$refs.loginFormRef.resetFields();
     },
     login() {
-      this.$refs.loginFormRef.validate(async (vaild) => {
+      this.$refs.loginFormRef.validate(async vaild => {
         if (!vaild) return;
         const { data: res } = await this.$http.post("login", this.loginForm);
         // console.log(res);
@@ -130,7 +130,7 @@ export default {
         window.sessionStorage.setItem("token", res.data.token);
         this.$router.push("/home");
       });
-    },
-  },
+    }
+  }
 };
 </script>

@@ -125,10 +125,10 @@ export default {
               authName: "分类列表",
               path: "categories",
               children: [],
-              order: null,
-            },
+              order: null
+            }
           ],
-          order: 1,
+          order: 1
         },
         {
           id: 120,
@@ -140,17 +140,17 @@ export default {
               authName: "文章列表",
               path: "posts",
               children: [],
-              order: null,
+              order: null
             },
             {
               id: 122,
               authName: "编写文章",
               path: "post",
               children: [],
-              order: null,
-            },
+              order: null
+            }
           ],
-          order: 2,
+          order: 2
         },
         {
           id: 130,
@@ -162,10 +162,10 @@ export default {
               authName: "评论列表",
               path: "comments",
               children: [],
-              order: 1,
-            },
+              order: 1
+            }
           ],
-          order: 3,
+          order: 3
         },
         {
           id: 140,
@@ -177,10 +177,10 @@ export default {
               authName: "友链列表",
               path: "links",
               children: [],
-              order: null,
-            },
+              order: null
+            }
           ],
-          order: 4,
+          order: 4
         },
         {
           id: 150,
@@ -192,23 +192,23 @@ export default {
               authName: "数据报告",
               path: "reports",
               children: [],
-              order: null,
-            },
+              order: null
+            }
           ],
-          order: 5,
-        },
+          order: 5
+        }
       ],
       iconsObject: {
         110: "el-icon-collection",
         120: "el-icon-notebook-2",
         130: "el-icon-chat-line-square",
         140: "el-icon-link",
-        150: "el-icon-data-analysis",
+        150: "el-icon-data-analysis"
       },
       //是否折叠
       isCollapse: false,
       //被激活的链接地址
-      activePath: "",
+      activePath: ""
     };
   },
   created() {
@@ -232,9 +232,17 @@ export default {
     },
     //保存链接的激活状态
     saveNavState(activePath) {
+      // console.log("saveNavState()调用了");
       window.sessionStorage.setItem("activePath", activePath);
       this.activePath = activePath;
-    },
+    }
   },
+  mounted() {
+    let _this = this; //很重要把父路由的vue实例赋给_this
+    _this.$root.$on("next", function(activePath) {
+      //监听next事件，这里$root很重要，不懂去官网介绍
+      _this.saveNavState(activePath); //调用父路由中的方法
+    });
+  }
 };
 </script>

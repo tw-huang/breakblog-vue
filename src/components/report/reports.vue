@@ -33,7 +33,7 @@ export default {
         title: { text: "分类-文章点击次数" },
         tooltip: {},
         xAxis: {
-          data: res.data.name,
+          data: res.data.name
         },
         yAxis: {},
         series: [
@@ -41,12 +41,12 @@ export default {
             name: "点击量",
             type: "bar",
             data: res.data.click,
-            color: "#409eff",
-          },
-        ],
+            color: "#409eff"
+          }
+        ]
       });
-    },
-  },
+    }
+  }
 };
 </script>
 <style lang="less" scoped></style>

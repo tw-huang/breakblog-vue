@@ -11,7 +11,7 @@ Vue.prototype.$http = axios;
 axios.defaults.baseURL = "http://localhost:9001/api/v1/";
 // http request 拦截器
 axios.interceptors.request.use(
-  (config) => {
+  config => {
     // config.headers["Content-Type"] = "application/x-www-from-urlencoded";
     var token = sessionStorage.getItem("token");
     if (token) {
@@ -20,7 +20,7 @@ axios.interceptors.request.use(
     }
     return config;
   },
-  (err) => {
+  err => {
     return Promise.reject(err);
   }
 );
@@ -28,5 +28,5 @@ Vue.config.productionTip = false;
 
 new Vue({
   router,
-  render: (h) => h(App),
+  render: h => h(App)
 }).$mount("#app");

@@ -15,7 +15,7 @@ Vue.use(VueRouter);
 //解决vue-router 在3.0版本以上重复点菜单报错的问题
 const originalPush = VueRouter.prototype.push;
 VueRouter.prototype.push = function push(location) {
-  return originalPush.call(this, location).catch((err) => err);
+  return originalPush.call(this, location).catch(err => err);
 };
 
 const router = new VueRouter({
@@ -29,35 +29,35 @@ const router = new VueRouter({
       children: [
         {
           path: "/welcome",
-          component: Welcome,
+          component: Welcome
         },
         {
           path: "/categories",
-          component: Categories,
+          component: Categories
         },
         {
           path: "/posts",
-          component: Posts,
+          component: Posts
         },
         {
           path: "/post",
-          component: Post,
+          component: Post
         },
         {
           path: "/links",
-          component: Links,
+          component: Links
         },
         {
           path: "/comments",
-          component: Comments,
+          component: Comments
         },
         {
           path: "/reports",
-          component: Reports,
-        },
-      ],
-    },
-  ],
+          component: Reports
+        }
+      ]
+    }
+  ]
 });
 
 //挂载路由导航守卫

@@ -84,38 +84,39 @@ import "tinymce/icons/default"; //默认图标
 import "tinymce/plugins/help"; //帮助
 export default {
   components: {
-    Editor,
+    Editor
   },
   props: {
     // 基本路径，默认为空根目录，如果你的项目发布后的地址为目录形式，
     // 即abc.com/tinymce，baseUrl需要配置成tinymce，不然发布后资源会找不到
     baseUrl: {
       type: String,
-      default: "",
+      default: ""
     },
     disabled: {
       type: Boolean,
-      default: false,
+      default: false
     },
     plugins: {
       type: [String, Array],
       default:
-        "lists image table wordcount autolink code codesample hr fullscreen help",
+        "lists image table wordcount autolink code codesample hr fullscreen help"
     },
     toolbar: {
       type: [String, Array],
       default:
-        "undo redo | formatselect| bold italic forecolor strikethrough hr | bullist numlist outdent indent | alignleft aligncenter alignright alignjustify | image  table | removeformat  codesample  code fullscreen | help",
-    },
+        "undo redo | formatselect| bold italic forecolor strikethrough hr | bullist numlist outdent indent | alignleft aligncenter alignright alignjustify | image  table | removeformat  codesample  code fullscreen | help"
+    }
   },
   data() {
     return {
       categories: [],
       postForm: {
+        id: "",
         title: "",
         categoryId: "",
         subtitle: "",
-        body: "",
+        body: ""
       },
       init: {
         language_url: `${this.baseUrl}/tinymce/langs/zh_CN.js`,
@@ -126,32 +127,32 @@ export default {
         plugins: this.plugins,
         toolbar: this.toolbar,
         branding: false,
-        menubar: false,
+        menubar: false
       },
       postFormRules: {
         title: [
           {
             required: true,
             message: "请输入文章标题",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         categoryId: [
           {
             required: true,
             message: "请选择文章分类",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         subtitle: [
           {
             required: true,
             message: "请输入文章副标题",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
-        body: [{ required: true, message: "请输入文章内容", trigger: "blur" }],
-      },
+        body: [{ required: true, message: "请输入文章内容", trigger: "blur" }]
+      }
     };
   },
   mounted() {
@@ -180,16 +181,26 @@ export default {
     savePost() {
       // console.log(this.postForm);
       //校验文章内容
-      this.$refs.postFormRef.validate(async (valid) => {
+      this.$refs.postFormRef.validate(async valid => {
         // console.log(valid);
         if (!valid) return;
-        //发起请求
-        const { data: res } = await this.$http.post("post", this.postForm);
-        if (res.code == 0) {
-          this.$message.error("保存失败");
+        //发起请求,新增文章还是编辑文章
+        // console.log(this.postForm.id);
+        if (this.postForm.id === "undefined" || this.postForm.id === "") {
+          const { data: res } = await this.$http.post("post", this.postForm);
+          if (res.code == 0) {
+            this.$message.error("保存失败");
+          }
+          this.$message.success("保存成功");
+          this.$router.push("/posts");
+        } else {
+          const { data: res } = await this.$http.put("post", this.postForm);
+          if (res.code == 0) {
+            this.$message.error("编辑失败");
+          }
+          this.$message.success("编辑成功");
+          this.$router.push("/posts");
         }
-        this.$message.success("保存成功");
-        this.$router.push("/posts");
       });
     },
     //初始化文章数据
@@ -198,11 +209,12 @@ export default {
       if (res.code == 0) {
         this.$message.error("获取文章数据失败");
       }
+      this.postForm.id = res.data.id;
       this.postForm.title = res.data.title;
       this.postForm.subtitle = res.data.subtitle;
       this.postForm.body = res.data.body;
       this.postForm.categoryId = res.data.categoryId;
-    },
-  },
+    }
+  }
 };
 </script>

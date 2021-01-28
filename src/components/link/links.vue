@@ -132,7 +132,7 @@ export default {
         //当前页数
         pageNum: 1,
         //当前每页显示数据
-        pageSize: 10,
+        pageSize: 10
       },
       linkList: [],
       total: 0,
@@ -141,7 +141,7 @@ export default {
       //添加表单数据
       addForm: {
         name: "",
-        url: "",
+        url: ""
       },
       //添加表单验证规则对象
       addFormRules: {
@@ -149,16 +149,16 @@ export default {
           {
             required: true,
             message: "请输入友链名称",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         url: [
           {
             required: true,
             message: "请输入友链地址",
-            trigger: "blur",
-          },
-        ],
+            trigger: "blur"
+          }
+        ]
       },
 
       //控制修改对话框的显示与隐藏
@@ -166,7 +166,7 @@ export default {
       //查询到的表单数据
       editForm: {
         name: "",
-        url: "",
+        url: ""
       },
       //修改表单验证规则对象
       editFormRules: {
@@ -174,17 +174,17 @@ export default {
           {
             required: true,
             message: "请输入友链名称",
-            trigger: "blur",
-          },
+            trigger: "blur"
+          }
         ],
         url: [
           {
             required: true,
             message: "请输入友链地址",
-            trigger: "blur",
-          },
-        ],
-      },
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
   created() {
@@ -193,7 +193,7 @@ export default {
   methods: {
     async getLinkList() {
       const { data: res } = await this.$http.get("links", {
-        params: this.queryInfo,
+        params: this.queryInfo
       });
       if (res.code !== 1) {
         return this.$message.error("获取友链列表失败");
@@ -220,7 +220,7 @@ export default {
     },
     //确定添加友链
     addLink() {
-      this.$refs.addFormRef.validate(async (valid) => {
+      this.$refs.addFormRef.validate(async valid => {
         if (!valid) return;
         //发起请求
         const { data: res } = await this.$http.post("link", this.addForm);
@@ -247,7 +247,7 @@ export default {
     },
     //确定修改友链
     editCategory() {
-      this.$refs.editFormRef.validate(async (valid) => {
+      this.$refs.editFormRef.validate(async valid => {
         if (!valid) return;
         //发起请求
         // console.log(this.editForm);
@@ -267,7 +267,7 @@ export default {
       this.$confirm("删除操作, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(async () => {
           //发起删除请求
@@ -277,18 +277,18 @@ export default {
           }
           this.$message({
             type: "success",
-            message: "删除成功!",
+            message: "删除成功!"
           });
           this.getLinkList();
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除",
+            message: "已取消删除"
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

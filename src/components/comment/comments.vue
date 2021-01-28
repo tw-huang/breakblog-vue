@@ -82,12 +82,12 @@ export default {
         //当前页数
         pageNum: 1,
         //当前每页显示数据
-        pageSize: 10,
+        pageSize: 10
       },
       commentList: [],
       total: 0,
       //状态
-      reviewed: "",
+      reviewed: ""
     };
   },
   created() {
@@ -96,7 +96,7 @@ export default {
   methods: {
     async getcommentList() {
       const { data: res } = await this.$http.get("comments", {
-        params: this.queryInfo,
+        params: this.queryInfo
       });
       if (res.code !== 1) {
         return this.$message.error("获取评论列表失败");
@@ -122,7 +122,7 @@ export default {
       // console.log(reviewed);
       const { data: res } = await this.$http.put("comment", {
         id: id,
-        reviewed: reviewed == true ? 1 : 0,
+        reviewed: reviewed == true ? 1 : 0
       });
       console.log(res);
     },
@@ -131,7 +131,7 @@ export default {
       this.$confirm("删除操作, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(async () => {
           //发起删除请求
@@ -141,18 +141,18 @@ export default {
           }
           this.$message({
             type: "success",
-            message: "删除成功!",
+            message: "删除成功!"
           });
           this.getcommentList();
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除",
+            message: "已取消删除"
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 

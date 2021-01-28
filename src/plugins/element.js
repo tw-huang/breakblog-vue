@@ -25,7 +25,7 @@ import {
   Dialog,
   MessageBox,
   Select,
-  Option,
+  Option
 } from "element-ui";
 
 Vue.use(Button);

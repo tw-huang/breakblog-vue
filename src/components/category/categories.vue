@@ -126,7 +126,7 @@ export default {
         //当前页数
         pageNum: 1,
         //当前每页显示数据
-        pageSize: 10,
+        pageSize: 10
       },
       categoryList: [],
       total: 0,
@@ -134,7 +134,7 @@ export default {
       addDialogVisible: false,
       //添加表单数据
       addForm: {
-        name: "",
+        name: ""
       },
       //添加表单验证规则对象
       addFormRules: {
@@ -142,15 +142,15 @@ export default {
           {
             required: true,
             message: "请输入分类名称",
-            trigger: "blur",
-          },
-        ],
+            trigger: "blur"
+          }
+        ]
       },
       //控制修改对话框的显示与隐藏
       editDialogVisible: false,
       //查询到的表单数据
       editForm: {
-        name: "",
+        name: ""
       },
       //修改表单验证规则对象
       editFormRules: {
@@ -158,10 +158,10 @@ export default {
           {
             required: true,
             message: "请输入分类名称",
-            trigger: "blur",
-          },
-        ],
-      },
+            trigger: "blur"
+          }
+        ]
+      }
     };
   },
   created() {
@@ -170,7 +170,7 @@ export default {
   methods: {
     async getCategoryList() {
       const { data: res } = await this.$http.get("categories", {
-        params: this.queryInfo,
+        params: this.queryInfo
       });
       if (res.code !== 1) {
         return this.$message.error("获取分类列表失败");
@@ -197,7 +197,7 @@ export default {
     },
     //确定添加分类
     addCategory() {
-      this.$refs.addFormRef.validate(async (valid) => {
+      this.$refs.addFormRef.validate(async valid => {
         if (!valid) return;
         //发起请求
         const { data: res } = await this.$http.post("category", this.addForm);
@@ -224,7 +224,7 @@ export default {
     },
     //确定修改分类
     editCategory() {
-      this.$refs.editFormRef.validate(async (valid) => {
+      this.$refs.editFormRef.validate(async valid => {
         if (!valid) return;
         //发起请求
         // console.log(this.editForm);
@@ -245,7 +245,7 @@ export default {
       this.$confirm("删除操作, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       })
         .then(async () => {
           //发起删除请求
@@ -255,18 +255,18 @@ export default {
           }
           this.$message({
             type: "success",
-            message: "删除成功!",
+            message: "删除成功!"
           });
           this.getCategoryList();
         })
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除",
+            message: "已取消删除"
           });
         });
-    },
-  },
+    }
+  }
 };
 </script>
 
